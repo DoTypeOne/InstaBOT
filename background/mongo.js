@@ -16,6 +16,7 @@ function Setup() {
     db.on('error', console.error.bind(console, 'connection error:'))
 }
 
+
 var adminSchema = new mongoose.Schema({
     idAdmin: { type: Number, unique: true, required: true }
 })
@@ -35,7 +36,6 @@ async function SetAdmin(id) {
     })
     await x.save();
 }
-
 ///////////////////////////////////////////////////
 
 var pathSchema = new mongoose.Schema({
@@ -67,7 +67,6 @@ async function GetPath(id) {
     return ip
 
 }
-
 ////////////////////////////////////////////////////
 
 var photoSchema = new mongoose.Schema({
@@ -106,8 +105,7 @@ async function PhotoDelete(id) {
     })
     await x.save();
 }
-
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 async function getiPhotos(i) {
 

@@ -3,7 +3,7 @@ process.env["NTBA_FIX_319"] = 1;
 const Bot = require('node-telegram-bot-api');
 const token = '835439392:AAFCgY6dwbc_YFXDJ7OaXckq6-JDM973NHE';
 const axios = require('axios');
-const mongo = require('./background/mongo')
+const mongo = require('./../background/mongo')
 var index = 0;
 var pattone = 0;
 
@@ -105,6 +105,8 @@ bot.on('message', async(msg) => {
 
 })
 
+
+
 ///////////////////////////// CALLBACK QUERY ///////////////////////////////
 
 bot.on('callback_query', async function onCallbackQuery(admin) {
@@ -190,6 +192,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             } else {
                 bot.sendMessage(msg.chat.id, "NO")
             }
+
             break;
 
         case "nx":
@@ -207,6 +210,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             var counter = await mongo.countPhotos()
             prevPhoto(mci, counter)
             break;
+
         case "lk":
 
             var objid = await mongo.getiPhotos()
@@ -228,6 +232,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             dislike++;
             mongo.UpdateDislike(ip[index], dislike);
             break;
+
 
         case "mp":
             bot.sendMessage(msg.chat.id, "User Section", {
@@ -266,11 +271,16 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             mongo.UpdatePath(msg.chat.id, pattone);
             break;
 
+        case "x":
+
+            break;
         default:
 
             break;
     }
-})
+});
+
+bot.on("polling_error", (err) => console.log(err))
 
 ///////////////////////////// PHOTO UPLOADER FUNCTION ///////////////////////////////////
 bot.on('message', async(msg) => {
@@ -292,8 +302,6 @@ bot.on('message', async(msg) => {
                 infoFile = response.data
                 filePath = response.data.result.file_path
                 var url = "https://api.telegram.org/file/bot" + token + "/" + filePath;
-
-                //bot.sendMessage(msg.chat.id, "File Id:" + fileId + "\nFile Path:" + filePath + "\nUrl:" + url); //+ "\nImage Path:" + imagePath
 
                 //Download image that user sends to the bot
                 var download = require('download-file');
@@ -366,7 +374,6 @@ bot.on('message', (msg) => {
             });
     }
 });
-
 
 ///////////////////////////// NEXT PHOTO FUNCTION ///////////////////////////////////
 
