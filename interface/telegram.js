@@ -205,6 +205,27 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             var counter = await mongo.countPhotos()
             prevPhoto(mci, counter)
             break;
+        case "lk":
+
+            var objid = await mongo.getiPhotos()
+            var ip = []
+            ip[index] = objid[index].idPhoto;
+            var getlike = await mongo.getLikePhotos(ip[index])
+            var like = getlike.like;
+            like++;
+            mongo.UpdateLike(ip[index], like);
+
+            break;
+
+        case "dlk":
+            var objid = await mongo.getiPhotos()
+            var ip = []
+            ip[index] = objid[index].idPhoto;
+            var getdislike = await mongo.getDislikePhotos(ip[index]);
+            var dislike = getdislike.dislike;
+            dislike++;
+            mongo.UpdateDislike(ip[index], dislike);
+            break;
 
     }
 })

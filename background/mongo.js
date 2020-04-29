@@ -66,6 +66,33 @@ async function GetPath(id) {
 
 }
 
+////////////////////////////////////////////////////
+
+var photoSchema = new mongoose.Schema({
+    Username: { type: String, unique: false, required: true },
+    idUser: { type: Number, unique: false, required: true },
+    idPhoto: { type: String, unique: true, required: true },
+    date: { type: Date, unique: false, required: true },
+    like: { type: Number, unique: false, required: true },
+    dislike: { type: Number, unique: false, required: true }
+})
+
+var photoModel = mongoose.model('photo', photoSchema, 'photos')
+
+////////////////////////////////////////////////////////
+
+async function PhotoUp(username, id, url, dt, lk, dlk) {
+    var x = new photoModel({
+        Username: username,
+        idUser: id,
+        idPhoto: url,
+        date: dt,
+        like: lk,
+        dislike: dlk
+    })
+    await x.save();
+}
+
 module.exports = {
 
     photoModel: photoModel,
