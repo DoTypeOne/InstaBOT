@@ -270,6 +270,101 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
     }
 })
 
+///////////////////////////// PHOTO UPLOADER FUNCTION ///////////////////////////////////
+bot.on('message', async(msg) => {
+
+    var path = "images";
+    var fileId;
+    var infoFile;
+    var filePath;
+
+
+    var like = 0;
+    var dislike = 0;
+    pattone = await mongo.GetPath(msg.chat.id)
+    if (pattone == 3) {
+        fileId = msg.photo[msg.photo.length - 1].file_id;
+        axios.get("https://api.telegram.org/bot" + token + "/getFile?file_id=" + fileId)
+            .then(response => {
+
+                infoFile = response.data
+                filePath = response.data.result.file_path
+                var url = "https://api.telegram.org/file/bot" + token + "/" + filePath;
+
+                //bot.sendMessage(msg.chat.id, "File Id:" + fileId + "\nFile Path:" + filePath + "\nUrl:" + url); //+ "\nImage Path:" + imagePath
+
+                //Download image that user sends to the bot
+                var download = require('download-file');
+                var options = {
+                    directory: path,
+                    filename: fileId + ".jpg"
+                }
+
+                download(url, options, function(err) {
+                    if (err) throw err
+                    console.log("Download successful!")
+                    bot.sendMessage(msg.chat.id, "Uploaded correctly")
+                })
+                var date_ob = new Date().toLocaleString('it-ITA', {
+                    timeZone: 'Europe/Rome'
+                });
+
+                mongo.PhotoUp(msg.from.first_name, msg.chat.id, fileId, date_ob, like, dislike)
+                pattone = 0;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+})
+
+
+///////////////////////////// PHOTO DELETER FUNCTION ///////////////////////////////////
+bot.on('message', (msg) => {
+
+    var path = "images";
+    var fileId;
+    var infoFile;
+    var filePath;
+
+
+    var like = 0;
+    var dislike = 0;
+
+    if (pattone == 4) {
+        fileId = msg.photo[msg.photo.length - 1].file_id;
+        axios.get("https://api.telegram.org/bot" + token + "/getFile?file_id=" + fileId)
+            .then(response => {
+
+                infoFile = response.data
+                filePath = response.data.result.file_path
+                var url = "https://api.telegram.org/file/bot" + token + "/" + filePath;
+
+                //Download image that user sends to the bot
+                var download = require('download-file');
+                var options = {
+                    directory: path,
+                    filename: fileId + ".jpg"
+                }
+
+                download(url, options, function(err) {
+                    if (err) throw err
+                    console.log("Download successful!");
+
+                })
+                var date_ob = new Date().toLocaleString('it-ITA', {
+                    timeZone: 'Europe/Rome'
+                });
+
+                mongo.PhotoUp(msg.from.first_name, msg.chat.id, fileId, date_ob, like, dislike)
+                pattone = 0;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+});
+
 
 ///////////////////////////// NEXT PHOTO FUNCTION ///////////////////////////////////
 
