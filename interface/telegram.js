@@ -13,6 +13,7 @@ mongo.Setup()
 
 bot.onText(/\/start/, async(msg) => {
 
+    await mongo.UpdatePath(msg.chat.id, pattone)
     bot.sendMessage(msg.chat.id, "Welcome " + msg.from.first_name + "!", {
         "reply_markup": {
             inline_keyboard: [
@@ -140,6 +141,54 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
                     ]
                 }
             });
+            break;
+
+        case "amtal":
+            pattone = await mongo.GetPath(msg.chat.id)
+            pattone = 10;
+            mongo.UpdatePath(msg.chat.id, pattone);
+            bot.sendMessage(msg.chat.id, "Insert Password")
+            break;
+
+        case "tp":
+            pattone = await mongo.GetPath(msg.chat.id)
+            pattone = 1;
+            mongo.UpdatePath(msg.chat.id, pattone);
+            if (await mongo.countPhotos() > 0) {
+                var objid = await mongo.getiPhotos()
+                var ip = []
+                index = 0
+                ip[index] = objid[index].idPhoto;
+                bot.sendPhoto(msg.chat.id, ip[index])
+
+                bot.sendMessage(msg.chat.id, "Author: " + await mongo.getAutPhotos(ip[index]), {
+                    "reply_markup": {
+                        inline_keyboard: [
+                            [{
+                                text: 'Dislike',
+                                callback_data: 'dlk'
+                            }, {
+                                text: 'Like',
+                                callback_data: 'lk'
+                            }],
+                            [{
+                                text: 'Prev',
+                                callback_data: 'pv'
+                            }, {
+                                text: 'Next',
+                                callback_data: 'nx'
+                            }],
+                            [{
+                                text: 'Main Menu',
+                                callback_data: 'mm'
+                            }]
+                        ]
+                    }
+                });
+            } else {
+                bot.sendMessage(msg.chat.id, "NO")
+            }
+
             break;
     }
 })

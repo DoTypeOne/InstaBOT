@@ -33,3 +33,58 @@ async function SetAdmin(id) {
     })
     await x.save();
 }
+
+///////////////////////////////////////////////////
+
+var pathSchema = new mongoose.Schema({
+    idUser: { type: Number, unique: true, required: true },
+    idPath: { type: Number, unique: false, required: true }
+})
+
+var pathModel = mongoose.model('path', pathSchema, 'paths')
+
+async function UpdatePath(id, level) {
+    pathModel.findOneAndUpdate({
+        idUser: id
+    }, {
+        $set: {
+            idPath: level
+        }
+    }, {
+        upsert: true,
+        setDefaultsOnInsert: true
+    }).exec()
+}
+
+async function GetPath(id) {
+
+    let path = await pathModel.findOne({
+        idUser: id
+    }).lean()
+    var ip = path.idPath
+    return ip
+
+}
+
+module.exports = {
+
+    photoModel: photoModel,
+    adminModel: adminModel,
+    pathModel: pathModel,
+
+    Setup: Setup,
+    GetAdmin: GetAdmin,
+    SetAdmin: SetAdmin,
+    UpdatePath: UpdatePath,
+    PhotoUp: PhotoUp,
+    getiPhotos: getiPhotos,
+    getAutPhotos: getAutPhotos,
+    countPhotos: countPhotos,
+    UpdateLike: UpdateLike,
+    UpdateDislike: UpdateDislike,
+    getLikePhotos: getLikePhotos,
+    getDislikePhotos: getDislikePhotos,
+    GetPath: GetPath,
+    PhotoDelete: PhotoDelete,
+    CheckVotes: CheckVotes
+}
