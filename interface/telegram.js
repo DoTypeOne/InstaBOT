@@ -188,7 +188,111 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             } else {
                 bot.sendMessage(msg.chat.id, "NO")
             }
-
             break;
+
+        case "nx":
+            //Richiamo il metodo per far apparire l'immagine successiva tramite il DB
+            //Se ultima avviso l'utente
+            var counter = await mongo.countPhotos()
+            nextPhoto(mci, counter)
+            break;
+
+        case "pv":
+
+            //richiamo il metodo per far apparire l'immagine precedente tramite il DB
+            //Se prima avvisa l'utente
+
+            var counter = await mongo.countPhotos()
+            prevPhoto(mci, counter)
+            break;
+
     }
 })
+
+
+///////////////////////////// NEXT PHOTO FUNCTION ///////////////////////////////////
+
+async function nextPhoto(mci, counter) {
+
+    var x = await mongo.getiPhotos()
+    var ip = []
+    if (index < counter) {
+        index++
+        ip[index] = x[index].idPhoto;
+        bot.sendPhoto(mci, ip[index])
+
+        bot.sendMessage(mci, "Author: " + await mongo.getAutPhotos(ip[index]), {
+            "reply_markup": {
+                inline_keyboard: [
+                    [{
+                        text: 'Dislike',
+                        callback_data: 'dlk'
+                    }, {
+                        text: 'Like',
+                        callback_data: 'lk'
+                    }],
+                    [{
+                        text: 'Prev',
+                        callback_data: 'pv'
+                    }, {
+                        text: 'Next',
+                        callback_data: 'nx'
+                    }],
+                    [{
+                        text: 'Main Menu',
+                        callback_data: 'mm'
+                    }]
+                ]
+            }
+        });
+
+    } else {
+        bot.sendMessage(mci, "No more photos to watch!")
+    }
+
+
+}
+
+///////////////////////////// PREV PHOTO FUNCTION ///////////////////////////////////
+async function prevPhoto(mci, counter) {
+
+    var x = await mongo.getiPhotos()
+    var ip = []
+    if (index == counter) {
+
+        bot.sendMessage(mci, "There aren't new photos!")
+
+    } else {
+        index--
+        ip[index] = x[index].idPhoto;
+        bot.sendPhoto(mci, ip[index])
+
+        bot.sendMessage(mci, "By " + await mongo.getAutPhotos(ip[index]), {
+            "reply_markup": {
+                inline_keyboard: [
+                    [{
+                        text: 'Dislike',
+                        callback_data: 'dlk'
+                    }, {
+                        text: 'Like',
+                        callback_data: 'lk'
+                    }],
+                    [{
+                        text: 'Prev',
+                        callback_data: 'pv'
+                    }, {
+                        text: 'Next',
+                        callback_data: 'nx'
+                    }],
+                    [{
+                        text: 'Main Menu',
+                        callback_data: 'mm'
+                    }]
+                ]
+            }
+        });
+
+    }
+
+
+}
