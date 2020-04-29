@@ -1,3 +1,5 @@
+process.env["NTBA_FIX_319"] = 1;
+
 'use strict';
 var mongoose = require('mongoose');
 var fs = require('fs');

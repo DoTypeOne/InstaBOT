@@ -1,3 +1,5 @@
+process.env["NTBA_FIX_319"] = 1;
+
 const Bot = require('node-telegram-bot-api');
 const token = '835439392:AAFCgY6dwbc_YFXDJ7OaXckq6-JDM973NHE';
 const axios = require('axios');
