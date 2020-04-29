@@ -227,6 +227,46 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             mongo.UpdateDislike(ip[index], dislike);
             break;
 
+        case "mp":
+            bot.sendMessage(msg.chat.id, "User Section", {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{
+                                text: 'Upload Photo',
+                                callback_data: 'up'
+                            },
+                            {
+                                text: 'Delete Photo',
+                                callback_data: 'dp'
+                            }
+                        ],
+                        [{
+                            text: 'Main Menu',
+                            callback_data: 'mm'
+                        }]
+                    ]
+                }
+
+            });
+
+            break;
+
+        case "up":
+            bot.sendMessage(msg.chat.id, "Send photo that u want to upload");
+            pattone = await mongo.GetPath(msg.chat.id);
+            pattone = 3;
+            mongo.UpdatePath(msg.chat.id, pattone);
+            break;
+
+        case "dp":
+            bot.sendMessage(msg.chat.id, "Send photo that u want to delete");
+            pattone = 4;
+            mongo.UpdatePath(msg.chat.id, pattone);
+            break;
+
+        default:
+
+            break;
     }
 })
 

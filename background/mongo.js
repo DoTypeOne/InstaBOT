@@ -93,6 +93,122 @@ async function PhotoUp(username, id, url, dt, lk, dlk) {
     await x.save();
 }
 
+async function PhotoDelete(id) {
+    var x = new photoModel({
+        Username: username,
+        idUser: id,
+        idPhoto: url,
+        date: dt,
+        like: lk,
+        dislike: dlk
+    })
+    await x.save();
+}
+
+/////////////////////////////////////////////////////////
+
+async function getiPhotos(i) {
+
+    var ip = await photoModel.find({}, {
+        '_id': 0,
+        'Username': 0,
+        'idUser': 0,
+        'like': 0,
+        'dislike': 0,
+        '__v': 0
+    }).lean()
+
+    return ip
+
+}
+
+async function getAutPhotos(ipp) {
+
+    var aut = await photoModel.findOne({ idPhoto: ipp }, {
+        '_id': 0,
+        'idUser': 0,
+        'idPhoto': 0,
+        'like': 0,
+        'dislike': 0,
+        '__v': 0
+    }).lean()
+    var autname = aut.Username
+    return autname
+}
+
+async function countPhotos() {
+    var counter = await photoModel.countDocuments().lean()
+    return counter
+}
+
+
+async function getLikePhotos(ipp) {
+
+    var lk = await photoModel.findOne({ idPhoto: ipp }, {
+        '_id': 0,
+        'Username': 0,
+        'date': 0,
+        'idUser': 0,
+        'idPhoto': 0,
+        'dislike': 0,
+        '__v': 0
+    }).lean()
+
+    return lk
+}
+
+async function getDislikePhotos(ipp) {
+
+    var dlk = await photoModel.findOne({ idPhoto: ipp }, {
+        '_id': 0,
+        'Username': 0,
+        'date': 0,
+        'like': 0,
+        'idUser': 0,
+        'idPhoto': 0,
+        '__v': 0
+    }).lean()
+
+    return dlk
+}
+
+async function UpdateLike(id, lk) {
+    photoModel.findOneAndUpdate({
+        idPhoto: id
+    }, {
+        $set: {
+            like: lk,
+        }
+    }).exec()
+}
+
+async function UpdateDislike(id, dlk) {
+    photoModel.findOneAndUpdate({
+        idPhoto: id
+    }, {
+        $set: {
+            dislike: dlk,
+        }
+    }).exec()
+}
+
+async function CheckVotes() {
+
+    photoModel.find({ like: 0 }, function(err, data) {
+        if (err) {
+            console.log(err);
+            return
+        }
+
+        if (data.length == 0) {
+            console.log("No record found")
+            return
+        }
+
+        console.log(data[0].Username);
+    }).sort()
+}
+
 module.exports = {
 
     photoModel: photoModel,
