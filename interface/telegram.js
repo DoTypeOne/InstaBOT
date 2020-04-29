@@ -101,3 +101,45 @@ bot.on('message', async(msg) => {
     // }
 
 })
+
+///////////////////////////// CALLBACK QUERY ///////////////////////////////
+
+bot.on('callback_query', async function onCallbackQuery(admin) {
+    const action = admin.data
+    const msg = admin.message
+    var mci = msg.chat.id
+
+    switch (action) {
+
+        case "ini":
+            bot.sendMessage(msg.chat.id, "Send photo that u want to upload");
+            pattone = await mongo.GetPath(msg.chat.id);
+            pattone = 3;
+            mongo.UpdatePath(msg.chat.id, pattone);
+            break;
+
+        case "cv":
+            pattone = await mongo.GetPath(msg.chat.id)
+            pattone = 11
+            mongo.UpdatePath(msg.chat.id, pattone);
+            await mongo.CheckVotes()
+
+            break;
+
+        case "mm":
+            bot.sendMessage(msg.chat.id, "Main Menu", {
+                "reply_markup": {
+                    inline_keyboard: [
+                        [{
+                            text: 'Today Photos',
+                            callback_data: 'tp'
+                        }, {
+                            text: 'My Photos',
+                            callback_data: 'mp'
+                        }]
+                    ]
+                }
+            });
+            break;
+    }
+})
