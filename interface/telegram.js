@@ -4,11 +4,12 @@ const Bot = require('node-telegram-bot-api');
 const token = '835439392:AAFCgY6dwbc_YFXDJ7OaXckq6-JDM973NHE';
 const axios = require('axios');
 const mongo = require('./../background/mongo')
+var emoji = require('node-emoji')
 var index = 0;
 var pattone = 0;
 
 const bot = new Bot(token, { polling: true });
-console.log("BOT_ON")
+console.log("BOT_ON ")
 mongo.Setup()
 
 ////////////////////////// START ////////////////////////////////////////////
@@ -20,7 +21,7 @@ bot.onText(/\/start/, async(msg) => {
         "reply_markup": {
             inline_keyboard: [
                 [{
-                    text: 'Today Photos',
+                    text: 'Today Photos ' + emoji.get('camera'),
                     callback_data: 'tp'
                 }, {
                     text: 'My Photos',
@@ -65,7 +66,7 @@ bot.onText(/\/admin/, async(msg) => {
                         text: 'Add me to admin list',
                         callback_data: 'amtal'
                     }, {
-                        text: 'Main Menu',
+                        text: 'Main Menu ' + emoji.get('house'),
                         callback_data: 'mm'
                     }]
                 ]
@@ -132,11 +133,11 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             break;
 
         case "mm":
-            bot.sendMessage(msg.chat.id, "Main Menu", {
+            bot.sendMessage(msg.chat.id, 'Main Menu ' + emoji.get('house'), {
                 "reply_markup": {
                     inline_keyboard: [
                         [{
-                            text: 'Today Photos',
+                            text: 'Today Photos ' + emoji.get('camera'),
                             callback_data: 'tp'
                         }, {
                             text: 'My Photos',
@@ -169,21 +170,21 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
                     "reply_markup": {
                         inline_keyboard: [
                             [{
-                                text: 'Dislike',
+                                text: 'Dislike ' + emoji.get('-1'),
                                 callback_data: 'dlk'
                             }, {
-                                text: 'Like',
+                                text: 'Like '  + emoji.get('+1'),
                                 callback_data: 'lk'
                             }],
                             [{
-                                text: 'Prev',
+                                text: 'Prev ' + emoji.get('arrow_left'),
                                 callback_data: 'pv'
                             }, {
-                                text: 'Next',
+                                text: 'Next ' + emoji.get('arrow_right'),
                                 callback_data: 'nx'
                             }],
                             [{
-                                text: 'Main Menu',
+                                text: 'Main Menu ' + emoji.get('house'),
                                 callback_data: 'mm'
                             }]
                         ]
@@ -239,16 +240,16 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
                 reply_markup: {
                     inline_keyboard: [
                         [{
-                                text: 'Upload Photo',
+                                text: 'Upload Photo ' + emoji.get('arrow_double_up'),
                                 callback_data: 'up'
                             },
                             {
-                                text: 'Delete Photo',
+                                text: 'Delete Photo ',
                                 callback_data: 'dp'
                             }
                         ],
                         [{
-                            text: 'Main Menu',
+                            text: 'Main Menu ' + emoji.get('house'),
                             callback_data: 'mm'
                         }]
                     ]
@@ -390,21 +391,21 @@ async function nextPhoto(mci, counter) {
             "reply_markup": {
                 inline_keyboard: [
                     [{
-                        text: 'Dislike',
+                        text: 'Dislike ' + emoji.get('-1'),
                         callback_data: 'dlk'
                     }, {
-                        text: 'Like',
+                        text: 'Like '  + emoji.get('+1'),
                         callback_data: 'lk'
                     }],
                     [{
-                        text: 'Prev',
+                        text: 'Prev ' + emoji.get('arrow_left') ,
                         callback_data: 'pv'
                     }, {
-                        text: 'Next',
+                        text: 'Next ' + emoji.get('arrow_right'),
                         callback_data: 'nx'
                     }],
                     [{
-                        text: 'Main Menu',
+                        text: 'Main Menu ' + emoji.get('house'),
                         callback_data: 'mm'
                     }]
                 ]
@@ -436,21 +437,21 @@ async function prevPhoto(mci, counter) {
             "reply_markup": {
                 inline_keyboard: [
                     [{
-                        text: 'Dislike',
+                        text: 'Dislike ' + emoji.get('-1'),
                         callback_data: 'dlk'
                     }, {
-                        text: 'Like',
+                        text: 'Like '  + emoji.get('+1'),
                         callback_data: 'lk'
                     }],
                     [{
-                        text: 'Prev',
+                        text: 'Prev ' + emoji.get('arrow_left'),
                         callback_data: 'pv'
                     }, {
-                        text: 'Next',
+                        text: 'Next ' + emoji.get('arrow_right'),
                         callback_data: 'nx'
                     }],
                     [{
-                        text: 'Main Menu',
+                        text: 'Main Menu ' + emoji.get('house'),
                         callback_data: 'mm'
                     }]
                 ]
