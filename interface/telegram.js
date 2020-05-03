@@ -211,7 +211,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             break;
 
         case "lk":
-
+            bot.sendMessage(msg.chat.id, "Like!")
             var objid = await mongo.getiPhotos()
             var ip = []
             ip[index] = objid[index].idPhoto;
@@ -223,6 +223,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             break;
 
         case "dlk":
+            bot.sendMessage(msg.chat.id, "Dislike")
             var objid = await mongo.getiPhotos()
             var ip = []
             ip[index] = objid[index].idPhoto;
@@ -242,8 +243,8 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
                                 callback_data: 'up'
                             },
                             {
-                                text: 'Delete Photo ',
-                                callback_data: 'dp'
+                                text: 'WIP',
+                                callback_data: 'wip'
                             }
                         ],
                         [{
@@ -269,8 +270,8 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             mongo.UpdatePath(msg.chat.id, pattone);
             break;
 
-        case "x":
-
+        case "wip":
+            bot.sendMessage(msg.chat.id, "Work in progress section");
             break;
         default:
 
@@ -323,8 +324,8 @@ bot.on('message', async(msg) => {
                                         callback_data: 'up'
                                     },
                                     {
-                                        text: 'Delete Photo ',
-                                        callback_data: 'dp'
+                                        text: 'WIP',
+                                        callback_data: 'wip'
                                     }
                                 ],
                                 [{
