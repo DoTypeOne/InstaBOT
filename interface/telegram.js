@@ -173,7 +173,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
                                 text: 'Dislike ' + emoji.get('-1'),
                                 callback_data: 'dlk'
                             }, {
-                                text: 'Like '  + emoji.get('+1'),
+                                text: 'Like ' + emoji.get('+1'),
                                 callback_data: 'lk'
                             }],
                             [{
@@ -254,7 +254,6 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
                         }]
                     ]
                 }
-
             });
 
             break;
@@ -295,7 +294,10 @@ bot.on('message', async(msg) => {
     var like = 0;
     var dislike = 0;
     pattone = await mongo.GetPath(msg.chat.id)
-    if (pattone == 3) {
+    if ((pattone == 3) && (msg.photo == undefined)) {
+        bot.sendMessage(msg.chat.id, "Upload Error")
+        bot.sendMessage(msg.chat.id, "Send photo that u want to upload");
+    } else {
         fileId = msg.photo[msg.photo.length - 1].file_id;
         axios.get("https://api.telegram.org/bot" + token + "/getFile?file_id=" + fileId)
             .then(response => {
@@ -313,8 +315,27 @@ bot.on('message', async(msg) => {
 
                 download(url, options, function(err) {
                     if (err) throw err
-                    console.log("Download successful!")
+                        //console.log("Download successful!")
                     bot.sendMessage(msg.chat.id, "Uploaded correctly")
+                    bot.sendMessage(msg.chat.id, "User Section", {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [{
+                                        text: 'Upload Photo ' + emoji.get('arrow_double_up'),
+                                        callback_data: 'up'
+                                    },
+                                    {
+                                        text: 'Delete Photo ',
+                                        callback_data: 'dp'
+                                    }
+                                ],
+                                [{
+                                    text: 'Main Menu ' + emoji.get('house'),
+                                    callback_data: 'mm'
+                                }]
+                            ]
+                        }
+                    });
                 })
                 var date_ob = new Date().toLocaleString('it-ITA', {
                     timeZone: 'Europe/Rome'
@@ -394,11 +415,11 @@ async function nextPhoto(mci, counter) {
                         text: 'Dislike ' + emoji.get('-1'),
                         callback_data: 'dlk'
                     }, {
-                        text: 'Like '  + emoji.get('+1'),
+                        text: 'Like ' + emoji.get('+1'),
                         callback_data: 'lk'
                     }],
                     [{
-                        text: 'Prev ' + emoji.get('arrow_left') ,
+                        text: 'Prev ' + emoji.get('arrow_left'),
                         callback_data: 'pv'
                     }, {
                         text: 'Next ' + emoji.get('arrow_right'),
@@ -440,7 +461,7 @@ async function prevPhoto(mci, counter) {
                         text: 'Dislike ' + emoji.get('-1'),
                         callback_data: 'dlk'
                     }, {
-                        text: 'Like '  + emoji.get('+1'),
+                        text: 'Like ' + emoji.get('+1'),
                         callback_data: 'lk'
                     }],
                     [{
