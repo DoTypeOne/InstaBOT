@@ -207,9 +207,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
 
             //richiamo il metodo per far apparire l'immagine precedente tramite il DB
             //Se prima avvisa l'utente
-
-            var counter = await mongo.countPhotos()
-            prevPhoto(mci, counter)
+            prevPhoto(mci)
             break;
 
         case "lk":
@@ -403,8 +401,9 @@ async function nextPhoto(mci, counter) {
 
     var x = await mongo.getiPhotos()
     var ip = []
-    if (index < counter) {
-        index++
+    if (index == counter) {
+        bot.sendMessage(mci, "No more photos to watch!")
+    } else {
         ip[index] = x[index].idPhoto;
         bot.sendPhoto(mci, ip[index])
 
@@ -432,20 +431,18 @@ async function nextPhoto(mci, counter) {
                 ]
             }
         });
-
-    } else {
-        bot.sendMessage(mci, "No more photos to watch!")
+        index++
     }
 
 
 }
 
 ///////////////////////////// PREV PHOTO FUNCTION ///////////////////////////////////
-async function prevPhoto(mci, counter) {
+async function prevPhoto(mci) {
 
     var x = await mongo.getiPhotos()
     var ip = []
-    if (index == counter) {
+    if (index == 0) {
 
         bot.sendMessage(mci, "There aren't new photos!")
 
