@@ -18,6 +18,6 @@
     "author": "",
     "license": "ISC",
     "scripts": {
-        "start": "node interface\telegram.js"
+        "start": "node interface/\/telegram.js"
     }
 }
