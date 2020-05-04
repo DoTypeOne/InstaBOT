@@ -5,8 +5,7 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 
 function Setup() {
-    var connStr = 'mongodb+srv://FastidioCane:akamongodb@botester-ha78o.mongodb.net/test?retryWrites=true&w=majority';
-    mongoose.connect(connStr, {
+    mongoose.connect(process.env.DB_KEY, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
         useCreateIndex: true,

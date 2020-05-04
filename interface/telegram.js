@@ -1,14 +1,15 @@
 process.env["NTBA_FIX_319"] = 1;
 
 const Bot = require('node-telegram-bot-api');
-const token = '835439392:AAFCgY6dwbc_YFXDJ7OaXckq6-JDM973NHE';
 const axios = require('axios');
 const mongo = require('./../background/mongo')
-var emoji = require('node-emoji')
-var index = 0;
-var pattone = 0;
+const emoji = require('node-emoji')
+require('dotenv').config();
 
-const bot = new Bot(token, { polling: true });
+var index = 0;
+var userpath = 0;
+
+const bot = new Bot(process.env.BOT_TOKEN, { polling: true });
 console.log("BOT_ON ")
 mongo.Setup()
 
@@ -16,7 +17,7 @@ mongo.Setup()
 
 bot.onText(/\/start/, async(msg) => {
 
-    await mongo.UpdatePath(msg.chat.id, pattone)
+    await mongo.UpdatePath(msg.chat.id, userpath)
     bot.sendMessage(msg.chat.id, "Welcome " + msg.from.first_name + "!", {
         "reply_markup": {
             inline_keyboard: [
@@ -36,9 +37,9 @@ bot.onText(/\/start/, async(msg) => {
 //////////////////////////// ADMIN AUTHORIZATION ///////////////////////////////
 
 bot.onText(/\/admin/, async(msg) => {
-    pattone = await mongo.GetPath(msg.chat.id)
-    pattone = 10
-    await mongo.UpdatePath(msg.chat.id, pattone)
+    userpath = await mongo.GetPath(msg.chat.id)
+    userpath = 10
+    await mongo.UpdatePath(msg.chat.id, userpath)
     var admin = await mongo.GetAdmin(msg.chat.id)
     if (admin) {
         bot.sendMessage(msg.chat.id, "You're in!", {
@@ -78,7 +79,7 @@ bot.onText(/\/admin/, async(msg) => {
 
 bot.on('message', async(msg) => {
     var pw = "rat"
-    if ((pattone == 10) && (msg.text.toString().includes(pw))) {
+    if ((userpath == 10) && (msg.text.toString().includes(pw))) {
         await mongo.SetAdmin(msg.chat.id)
         bot.sendMessage(msg.chat.id, 'Now you are in Admin Mode!', {
             reply_markup: {
@@ -119,15 +120,15 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
 
         case "ini":
             bot.sendMessage(msg.chat.id, "Send photo that u want to upload");
-            pattone = await mongo.GetPath(msg.chat.id);
-            pattone = 3;
-            mongo.UpdatePath(msg.chat.id, pattone);
+            userpath = await mongo.GetPath(msg.chat.id);
+            userpath = 3;
+            mongo.UpdatePath(msg.chat.id, userpath);
             break;
 
         case "cv":
-            pattone = await mongo.GetPath(msg.chat.id)
-            pattone = 11
-            mongo.UpdatePath(msg.chat.id, pattone);
+            userpath = await mongo.GetPath(msg.chat.id)
+            userpath = 11
+            mongo.UpdatePath(msg.chat.id, userpath);
             await mongo.CheckVotes()
 
             break;
@@ -149,16 +150,16 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             break;
 
         case "amtal":
-            pattone = await mongo.GetPath(msg.chat.id)
-            pattone = 10;
-            mongo.UpdatePath(msg.chat.id, pattone);
+            userpath = await mongo.GetPath(msg.chat.id)
+            userpath = 10;
+            mongo.UpdatePath(msg.chat.id, userpath);
             bot.sendMessage(msg.chat.id, "Insert Password")
             break;
 
         case "tp":
-            pattone = await mongo.GetPath(msg.chat.id)
-            pattone = 1;
-            mongo.UpdatePath(msg.chat.id, pattone);
+            userpath = await mongo.GetPath(msg.chat.id)
+            userpath = 1;
+            mongo.UpdatePath(msg.chat.id, userpath);
             if (await mongo.countPhotos() > 0) {
                 var objid = await mongo.getiPhotos()
                 var ip = []
@@ -259,15 +260,15 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
 
         case "up":
             bot.sendMessage(msg.chat.id, "Send photo that u want to upload");
-            pattone = await mongo.GetPath(msg.chat.id);
-            pattone = 3;
-            mongo.UpdatePath(msg.chat.id, pattone);
+            userpath = await mongo.GetPath(msg.chat.id);
+            userpath = 3;
+            mongo.UpdatePath(msg.chat.id, userpath);
             break;
 
         case "dp":
             bot.sendMessage(msg.chat.id, "Send photo that u want to delete");
-            pattone = 4;
-            mongo.UpdatePath(msg.chat.id, pattone);
+            userpath = 4;
+            mongo.UpdatePath(msg.chat.id, userpath);
             break;
 
         case "wip":
@@ -292,8 +293,8 @@ bot.on('message', async(msg) => {
 
     var like = 0;
     var dislike = 0;
-    pattone = await mongo.GetPath(msg.chat.id)
-    if ((pattone == 3) && (msg.photo == undefined)) {
+    userpath = await mongo.GetPath(msg.chat.id)
+    if ((userpath == 3) && (msg.photo == undefined)) {
         bot.sendMessage(msg.chat.id, "Upload Error")
         bot.sendMessage(msg.chat.id, "Send photo that u want to upload");
     } else {
@@ -341,7 +342,7 @@ bot.on('message', async(msg) => {
                 });
 
                 mongo.PhotoUp(msg.from.first_name, msg.chat.id, fileId, date_ob, like, dislike)
-                pattone = 0;
+                userpath = 0;
             })
             .catch(error => {
                 console.log(error);
@@ -362,7 +363,7 @@ bot.on('message', (msg) => {
     var like = 0;
     var dislike = 0;
 
-    if (pattone == 4) {
+    if (userpath == 4) {
         fileId = msg.photo[msg.photo.length - 1].file_id;
         axios.get("https://api.telegram.org/bot" + token + "/getFile?file_id=" + fileId)
             .then(response => {
@@ -388,7 +389,7 @@ bot.on('message', (msg) => {
                 });
 
                 mongo.PhotoUp(msg.from.first_name, msg.chat.id, fileId, date_ob, like, dislike)
-                pattone = 0;
+                userpath = 0;
             })
             .catch(error => {
                 console.log(error);
