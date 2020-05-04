@@ -1,0 +1,23 @@
+{
+    "name": "telegram-node-bot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "home.js",
+    "dependencies": {
+        "axios": "^0.19.2",
+        "mongoose": "^5.9.6",
+        "node-telegram-bot-api": "^0.40.0",
+        "tedious": "^8.0.1",
+        "telegram-node-bot": "^4.0.5"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "scripts": {
+        "start": "node interface\telegram.js"
+    }
+}
