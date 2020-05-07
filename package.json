@@ -6,6 +6,7 @@
     "dependencies": {
         "axios": "^0.19.2",
         "dotenv": "^8.2.0",
+        "download-file": "^0.1.5",
         "mongoose": "^5.9.6",
         "node-emoji": "^1.10.0",
         "node-telegram-bot-api": "^0.40.0",

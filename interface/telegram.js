@@ -130,7 +130,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
             userpath = 11
             mongo.UpdatePath(msg.chat.id, userpath);
             await mongo.CheckVotes()
-
+                //console.log(await mongo.CheckVotes())
             break;
 
         case "mm":
@@ -290,21 +290,23 @@ bot.on('message', async(msg) => {
     var infoFile;
     var filePath;
 
-
     var like = 0;
     var dislike = 0;
     userpath = await mongo.GetPath(msg.chat.id)
+
+    console.log(userpath)
+
     if ((userpath == 3) && (msg.photo == undefined)) {
         bot.sendMessage(msg.chat.id, "Upload Error")
         bot.sendMessage(msg.chat.id, "Send photo that u want to upload");
     } else {
         fileId = msg.photo[msg.photo.length - 1].file_id;
-        axios.get("https://api.telegram.org/bot" + token + "/getFile?file_id=" + fileId)
+        axios.get("https://api.telegram.org/bot" + process.env.BOT_TOKEN + "/getFile?file_id=" + fileId)
             .then(response => {
 
                 infoFile = response.data
                 filePath = response.data.result.file_path
-                var url = "https://api.telegram.org/file/bot" + token + "/" + filePath;
+                var url = "https://api.telegram.org/file/bot" + process.env.BOT_TOKEN + "/" + filePath;
 
                 //Download image that user sends to the bot
                 var download = require('download-file');
@@ -365,12 +367,12 @@ bot.on('message', (msg) => {
 
     if (userpath == 4) {
         fileId = msg.photo[msg.photo.length - 1].file_id;
-        axios.get("https://api.telegram.org/bot" + token + "/getFile?file_id=" + fileId)
+        axios.get("https://api.telegram.org/bot" + process.env.BOT_TOKEN + "/getFile?file_id=" + fileId)
             .then(response => {
 
                 infoFile = response.data
                 filePath = response.data.result.file_path
-                var url = "https://api.telegram.org/file/bot" + token + "/" + filePath;
+                var url = "https://api.telegram.org/file/bot" + process.env.BOT_TOKEN + "/" + filePath;
 
                 //Download image that user sends to the bot
                 var download = require('download-file');

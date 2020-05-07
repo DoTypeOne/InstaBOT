@@ -106,7 +106,7 @@ async function PhotoDelete(id) {
 }
 //////////////////////////////////////////////////////////
 
-async function getiPhotos(i) {
+async function getiPhotos() {
 
     var ip = await photoModel.find({}, {
         '_id': 0,
@@ -193,19 +193,20 @@ async function UpdateDislike(id, dlk) {
 
 async function CheckVotes() {
 
-    photoModel.find({ like: 0 }, function(err, data) {
-        if (err) {
-            console.log(err);
-            return
-        }
-
-        if (data.length == 0) {
-            console.log("No record found")
-            return
-        }
-
-        console.log(data[0].Username);
-    }).sort()
+    photoModel.find({}, {
+            '_id': 0,
+            'idUser': 0,
+            'dislike': 0,
+            'date': 0,
+            '__v': 0
+        },
+        function(err, docs) {
+            if (!err) {
+                console.log(docs);
+            } else {
+                throw err;
+            }
+        }).sort({ like: -1 })
 }
 
 module.exports = {
