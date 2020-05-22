@@ -192,7 +192,7 @@ bot.on('callback_query', async function onCallbackQuery(admin) {
                     }
                 });
             } else {
-                bot.sendMessage(msg.chat.id, "NO")
+                bot.sendMessage(msg.chat.id, "No photos for today")
             }
 
             break;
@@ -287,14 +287,11 @@ bot.on('message', async(msg) => {
 
     var path = "images";
     var fileId;
-    var infoFile;
     var filePath;
 
     var like = 0;
     var dislike = 0;
     userpath = await mongo.GetPath(msg.chat.id)
-
-    console.log(userpath)
 
     if ((userpath == 3) && (msg.photo == undefined)) {
         bot.sendMessage(msg.chat.id, "Upload Error")
@@ -409,6 +406,7 @@ async function nextPhoto(mci, counter) {
         bot.sendMessage(mci, "No more photos to watch!")
     } else {
         ip[index] = x[index].idPhoto;
+
         bot.sendPhoto(mci, ip[index])
 
         bot.sendMessage(mci, "Author: " + await mongo.getAutPhotos(ip[index]), {
